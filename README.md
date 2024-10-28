@@ -4,6 +4,29 @@ Proyecto pipex del cursus 42.
 ### ¿De qué va el proyecto?
 blablabla
 
+El programa debe ejecutarse de la siguiente manera: *./pipex infile cmd1 cmd2 outfile*
+Y tiene que emular el comportamiento del comando *< infile cmd1 | cmd2 > outfile*, donde:
+  - infile y outfile son nombres de archivos.
+  - cmd1 y cmd2 son comandos de shell.
+
+¿Qué hace este comando? 
+
+Toma el contenido de infile y lo envía como entrada estándar (stdin) al cmd1. El pipe (|) conecta la salida estándar (stdout) del cmd1 con la entrada (stdin) del cmd2. El resultado de ejecutar el cmd1 se pasa directamente al cmd2 sin guardarlo en un archivo temporal. Así, se ejecutan dos comandos en cadena. La salida estándar de cmd2 se guarda en outfile. Si el archivo existe, se sobreescribe; si no, se crea uno nuevo. En lugar de mostrar los resultados por pantalla, se rederigen a outfile.
+
+**Parte bonus:**
+
+Gestionar múltiples pipes.
+
+El programa debe ejecutarse así: *./pipex infile cmd1 cmd2 cmd3 ... cmdn outfile*
+
+Y tiene que emular el comportamiento del comando: *< infile cmd1 | cmd2 | cmd3 ... | cmdn > outfile*
+
+También tiene que aceptar << y >> cuando el primer parámetro es "here_doc":
+
+*./pipex here\_doc LIMITADOR cmd cmd1 file*
+
+Debe comportarse como: *cmd << LIMITADOR | cmd1 >> file*
+
 ### Explicación de las funciones autorizadas
 
 ***open()***
