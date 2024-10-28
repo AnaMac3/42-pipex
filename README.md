@@ -1,7 +1,8 @@
 # **Pipex**
 Proyecto pipex del cursus 42.
 
-### ¿De qué va el proyecto?
+### Introducción
+
 blablabla
 
 El programa debe ejecutarse de la siguiente manera: *./pipex infile cmd1 cmd2 outfile*
@@ -13,23 +14,6 @@ Y tiene que emular el comportamiento del comando *< infile cmd1 | cmd2 > outfile
 
 Toma el contenido de infile y lo envía como entrada estándar (stdin) al cmd1. El pipe (|) conecta la salida estándar (stdout) del cmd1 con la entrada (stdin) del cmd2. El resultado de ejecutar el cmd1 se pasa directamente al cmd2 sin guardarlo en un archivo temporal. Así, se ejecutan dos comandos en cadena. La salida estándar de cmd2 se guarda en outfile. Si el archivo existe, se sobreescribe; si no, se crea uno nuevo. En lugar de mostrar los resultados por pantalla, se rederigen a outfile.
 
-**Parte bonus:**
-
-Gestionar múltiples pipes.
-
-El programa debe ejecutarse así: *./pipex infile cmd1 cmd2 cmd3 ... cmdn outfile*
-
-Y tiene que emular el comportamiento del comando: *< infile cmd1 | cmd2 | cmd3 ... | cmdn > outfile*
-
-¿Qué hace este comando?
-
-Comandos adicionales en la misma cadena de tuberías. Cada comando tomará la salida del comando anterior como su entrada. La salida final del último comando se guarda en outfile. 
-
-También tiene que aceptar << y >> cuando el primer parámetro es "here_doc":
-
-*./pipex here\_doc LIMITADOR cmd cmd1 file*
-
-Debe comportarse como: *cmd << LIMITADOR | cmd1 >> file*
 
 ### Explicación de las funciones autorizadas
 
@@ -218,6 +202,26 @@ Devuelve el PID del hijo que terminó en caso de éxito. En caso de error, devue
 
 Usar waitpid() es esencial para evitar que los procesos hijos se conviertan en zombies. Cada vez que un hijo termina, si el padre no lo recoge, este proceso hijo permanece en la tabla de procesos como un proceso zombie hasta que el padre llame a una de estas funciones. Un proceso zombie es un proceso que ha temrinado su ejecución pero todavía tiene una entrada en la tabla de procesos del sistema.
 Comprobar procesos zomies: despues de ejecutar tu programa, usar comando *ps aux | grep pipex* y ver si hay alguna 'Z' en la columna de estado (la octava columna). La columna de estado mostrará una Z indicando que el proceso está en estado zombie.
+
+**Parte bonus:**
+
+Gestionar múltiples pipes.
+
+El programa debe ejecutarse así: *./pipex infile cmd1 cmd2 cmd3 ... cmdn outfile*
+
+Y tiene que emular el comportamiento del comando: *< infile cmd1 | cmd2 | cmd3 ... | cmdn > outfile*
+
+¿Qué hace este comando?
+
+Comandos adicionales en la misma cadena de tuberías. Cada comando tomará la salida del comando anterior como su entrada. La salida final del último comando se guarda en outfile. 
+
+También tiene que aceptar << y >> cuando el primer parámetro es "here_doc":
+
+*./pipex here\_doc LIMITADOR cmd cmd1 file*
+
+Debe comportarse como: *cmd << LIMITADOR | cmd1 >> file*
+
+    Cada proceso intermedio debe tomar la entrada desde el pipe de lectura del proceso anterior(prev_pipefd[0]) y enviar su salida al pipe de escritura del proceso actual (pipefd[1]). 
 
 ### Recursos
 Teoría y guías &rarr; [AQUÍ](https://csnotes.medium.com/pipex-tutorial-42-project-4469f5dd5901), [AQUÍ](https://reactive.so/post/42-a-comprehensive-guide-to-pipex/), [AQUÍ](https://medium.com/@omimouni33/pipex-the-42-project-understanding-pipelines-in-c-71984b3f2103)
