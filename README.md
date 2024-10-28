@@ -21,6 +21,10 @@ El programa debe ejecutarse así: *./pipex infile cmd1 cmd2 cmd3 ... cmdn outfil
 
 Y tiene que emular el comportamiento del comando: *< infile cmd1 | cmd2 | cmd3 ... | cmdn > outfile*
 
+¿Qué hace este comando?
+
+Comandos adicionales en la misma cadena de tuberías. Cada comando tomará la salida del comando anterior como su entrada. La salida final del último comando se guarda en outfile. 
+
 También tiene que aceptar << y >> cuando el primer parámetro es "here_doc":
 
 *./pipex here\_doc LIMITADOR cmd cmd1 file*
