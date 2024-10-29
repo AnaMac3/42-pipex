@@ -233,7 +233,7 @@ Debe comportarse como: *cmd << LIMITADOR | cmd1 >> file*
 
 ```mermaid
 graph LR;
-    A["***main.c***"] --> B["Checkeo de los argumentos."];
+    A["***main.c (main.c)***"] --> B["Checkeo de los argumentos."];
     B --> C["Si argc != 5"];
     C --> D["Mensaje error y exit (EXIT_FAILURE)"];
     A --> E["Pipe: crea un canal de comunicación entre procesos."];
@@ -245,13 +245,46 @@ graph LR;
     H --> I["Si fork() == 1: estamos en el proceso hijo"];
     I --> J["***child_process*** (pipex.c): configura y ejecuta el primer comando en el pipeline"];
     H --> K["Si fork() > 1: estamos en el proceso padre"];
-    K --> L["***parent_process*** (pipex.c)"];
+    K --> L["***parent_process*** (pipex.c): configura y ejecuta el último comando en el pipeline"];
     J --> M["Comprueba los accesos del archivo de entrada"];
-    M --> N["Si access(file, F_OK) o access(file, R_OK) == -1"];
-    N --> D;
+    M --> N["Si el archivo no existe o no tiene permisos de lectura"];
+    N --> Q["Mensaje error a ***handle_error*** (pipex_utils.c), ***close pipefd*** (pipex_utils.c) y exit (EXIT_FAILURE)"];
+    J --> O["Obtiene el fd del archivo de entrada con open()"];
+    O --> P["Si fd == -1"];
+    P --> Q;
+    J --> R["Cierra el extremo de lectura (pipefd[0]), porque aquí no se usa"];
+    J --> S["Redirige la stdin al fd del archivo de entrada y el stdout al extremo de escritura del pipe (pipefd[1])"];
+    J --> T["Cierra el input original y el pipefd[1] después de la redirección"];
+    J --> U["Llama a ***execute*** para runear el cmd1. El comando lee del stdin redirigido, es decir, del archivo de entrada, y escribe su output en el stdout redirigido, en pipefd[1]"];
+    L --> W["waipid(): espera a que termine el proceos hijo"];
+    L --> X["Abre o crea el archivo de salida con open(), con permisos de escritura y lectura. Si ya existe, lo trunca"];
+    L --> Y["Comprueba los accesos del archivo de salida"];
+    Y --> Z["Si el archivo no tiene permisos de lectura"];
+    Z --> Q;
+    X --> AA["Si fd == -1"];
+    AA --> Q;
+    L --> AB["Cierra el extremo de escritura pipefd[1] porque aquí no se usa"];
+    L --> AC["Redirige la stdin al extremo de lectura del pipe (pipefd[0]) y el stdout al fd del archivo de salida"];
+    L --> AD["Cierra el pipefd[0] y el output original después de la redirección"];
+    L --> AE["Llama a ***execute*** para runear el cmd2. El comando lee del extremo de lectura (pipefd[0]) y escribe su output en el archivo de salida"];
 
 style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
+style Q fill:#ffcccb,stroke:#ff0000,stroke-width:1px
+
 ```
+
+```mermaid
+graph LR;
+  A["***execute*** (pipex.c): "] --> B["Splitea el comando"];
+  B --> C["Si el split da NULL o el primer elemento del array es nulo"];
+  C --> D["***handle_cmd_error*** (pipex_utils.c): mensaje error y libera el array de argumentos. Si era el primer comando, cierra el stdout y exit (EXIT_FAILURE)"];
+  A --> E["***get_path*** (get_path.c): obtiene el ejecutable para un comando."];
+  E --> F["***get_path_from_envp*** (get_path.c): obtiene la ruta del array de la variable de entorno"];
+
+style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
+
+```
+
 ### Recursos
 Teoría y guías &rarr; [AQUÍ](https://csnotes.medium.com/pipex-tutorial-42-project-4469f5dd5901), [AQUÍ](https://reactive.so/post/42-a-comprehensive-guide-to-pipex/), [AQUÍ](https://medium.com/@omimouni33/pipex-the-42-project-understanding-pipelines-in-c-71984b3f2103)
 
