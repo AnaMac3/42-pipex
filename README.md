@@ -280,12 +280,24 @@ graph LR;
   C --> D["***handle_cmd_error*** (pipex_utils.c): mensaje error y libera el array de argumentos. Si era el primer comando, cierra el stdout y exit (EXIT_FAILURE)"];
   A --> E["***get_path*** (get_path.c): obtiene el ejecutable para un comando."];
   E --> F["***get_path_from_envp*** (get_path.c): obtiene la ruta del array de la variable de entorno"];
-  F --> G["Busca el string de envp que empieza por "PATH=" y devuelve el resto de esa string o NULL si no la encuentra"];
-  E --> H["Splitea la ruta obtenida del ***get_path_from_envp*** para obtener los directorios y libera la ruta"];
-  EH --> I[""];
+  F --> G["Busca el string de envp que empieza por PATH= y devuelve el resto de esa string o NULL si no la encuentra"];
+  E --> H["Splitea la ruta obtenida del ***get_path_from_envp*** para obtener los directorios, splitea el comando en sus argumentos y libera la ruta"];
+  H --> I["Si no hay directorios o no hay argumentos de comando, libera los arrays y devuelve NULL"];
+  E --> K["***build_cmd_path*** (get_path.c): construye la ruta del comando"];
+  K --> L["Hace strjoin de cada directorio con / y con el primer argumento de comando. Si la ruta existe y tiene permisos de ejecución, libera los arrays y la devuelve. Si no, lo intenta con el siguiente directorio. Si no lo encuentra, devuelve NULL."];
+  E --> M["Si existe, devuelve el array resultante de ***build_cmd_path***, si no, libera los arrays y devuelve un duplicado del cmd"];
+  A --> N["Si la ruta obtenida de ***get_path*** es NULL o no tiene acceso de ejecución"];
+  N --> O["Libera la ruta"];
+  O --> D;
+  A --> P["Llama a execve() con la ruta, los argumentos del comando y la variable de entorno"];
+  P --> Q["Si execve() == -1"];
+  Q --> R["***handle_cmd_error*** (pipex_utils.c): mensaje error y libera el array de argumentos. Libera la ruta, los argumentos de comando y exit (EXIT_FAILURE)"];
+
+  
   
 
 style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
+style R fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 
 ```
 
