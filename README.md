@@ -229,6 +229,29 @@ Debe comportarse como: *cmd << LIMITADOR | cmd1 >> file*
 
 *cmd1 >> file*: el comando recibe la entrada del pipe, >> es el operador de redirección para añadir (append) la salida al final del archivo. Si el archivo no existe, se crea.
 
+### Flujo de pipex
+
+```mermaid
+graph LR;
+    A["***main.c***"] --> B["Checkeo de los argumentos."];
+    B --> C["Si argc != 5"];
+    C --> D["Mensaje error y exit (EXIT_FAILURE)"];
+    A --> E["Pipe: crea un canal de comunicación entre procesos."];
+    E --> F["Si pipe() == -1"];
+    F --> D;
+    A --> G["Fork: genera un nuevo proceso hijo a partir de un proceso padre."];
+    G --> H["Si fork() < 0"];
+    H --> D;
+    H --> I["Si fork() == 1: estamos en el proceso hijo"];
+    I --> J["***child_process*** (pipex.c): configura y ejecuta el primer comando en el pipeline"];
+    H --> K["Si fork() > 1: estamos en el proceso padre"];
+    K --> L["***parent_process*** (pipex.c)"];
+    J --> M["Comprueba los accesos del archivo de entrada"];
+    M --> N["Si access(file, F_OK) o access(file, R_OK) == -1"];
+    N --> D;
+
+style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
+```
 ### Recursos
 Teoría y guías &rarr; [AQUÍ](https://csnotes.medium.com/pipex-tutorial-42-project-4469f5dd5901), [AQUÍ](https://reactive.so/post/42-a-comprehensive-guide-to-pipex/), [AQUÍ](https://medium.com/@omimouni33/pipex-the-42-project-understanding-pipelines-in-c-71984b3f2103)
 
