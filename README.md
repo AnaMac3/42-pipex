@@ -280,6 +280,10 @@ graph LR;
   C --> D["***handle_cmd_error*** (pipex_utils.c): mensaje error y libera el array de argumentos. Si era el primer comando, cierra el stdout y exit (EXIT_FAILURE)"];
   A --> E["***get_path*** (get_path.c): obtiene el ejecutable para un comando."];
   E --> F["***get_path_from_envp*** (get_path.c): obtiene la ruta del array de la variable de entorno"];
+  F --> G["Busca el string de envp que empieza por "PATH=" y devuelve el resto de esa string o NULL si no la encuentra"];
+  E --> H["Splitea la ruta obtenida del ***get_path_from_envp*** para obtener los directorios y libera la ruta"];
+  EH --> I[""];
+  
 
 style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 
