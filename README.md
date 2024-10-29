@@ -293,11 +293,29 @@ graph LR;
   P --> Q["Si execve() == -1"];
   Q --> R["***handle_cmd_error*** (pipex_utils.c): mensaje error y libera el array de argumentos. Libera la ruta, los argumentos de comando y exit (EXIT_FAILURE)"];
 
-  
-  
-
 style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 style R fill:#ffcccb,stroke:#ff0000,stroke-width:1px
+
+```
+
+### Flujo de parte bonus
+
+```mermaid
+graph LR;
+    A["***main.c (main.c)***"] --> B["***check_args*** (main.c): checkeo de los argumentos."];
+    B --> C["Si argc < 5"];
+    C --> D["Mensaje error y exit (EXIT_FAILURE)"];
+    B --> E["Si argv[1] es here_doc y argc != 6"];
+    E --> D;
+
+    A --> F["Si argv[1] es here_doc"];
+    F --> G["***here_doc*** (pipex_bonus.c): configura y ejecuta e here_doc en un proceso hijo"];
+    G --> H["Crea un pipe con ***do_pipe*** ()"];
+    G --> I["Si p == 0"];
+
+   
+style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
+
 
 ```
 
