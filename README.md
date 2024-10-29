@@ -215,13 +215,19 @@ Y tiene que emular el comportamiento del comando: *< infile cmd1 | cmd2 | cmd3 .
 
 Comandos adicionales en la misma cadena de tuberías. Cada comando tomará la salida del comando anterior como su entrada. La salida final del último comando se guarda en outfile. 
 
+Cada proceso intermedio debe tomar la entrada desde el pipe de lectura del proceso anterior(prev_pipefd[0]) y enviar su salida al pipe de escritura del proceso actual (pipefd[1]). 
+
 También tiene que aceptar << y >> cuando el primer parámetro es "here_doc":
 
 *./pipex here\_doc LIMITADOR cmd cmd1 file*
 
 Debe comportarse como: *cmd << LIMITADOR | cmd1 >> file*
 
-    Cada proceso intermedio debe tomar la entrada desde el pipe de lectura del proceso anterior(prev_pipefd[0]) y enviar su salida al pipe de escritura del proceso actual (pipefd[1]). 
+*cmd << LIMITADOR*: este comando se conoce como here-document o heredoc. Permite introducir múltiples líneas de texto como entrada para el comando. El texto se introduce hasta que se encuentra una línea que contiene solo "LIMITADOR".
+
+*|*: toma la salida del comando anterior y la envía como entrada al siguiente comando.
+
+*cmd1 >> file*: el comando recibe la entrada del pipe, >> es el operador de redirección para añadir (append) la salida al final del archivo. Si el archivo no existe, se crea.
 
 ### Recursos
 Teoría y guías &rarr; [AQUÍ](https://csnotes.medium.com/pipex-tutorial-42-project-4469f5dd5901), [AQUÍ](https://reactive.so/post/42-a-comprehensive-guide-to-pipex/), [AQUÍ](https://medium.com/@omimouni33/pipex-the-42-project-understanding-pipelines-in-c-71984b3f2103)
