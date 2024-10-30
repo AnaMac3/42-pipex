@@ -302,7 +302,7 @@ style R fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 
 ```mermaid
 graph LR;
-    A["***main.c (main.c)***"] --> B["***check_args*** (main.c): checkeo de los argumentos."];
+    A["***main (main_bonus.c)***"] --> B["***check_args*** (main.c): checkeo de los argumentos."];
     B --> C["Si argc < 5"];
     C --> D["Mensaje error y exit (EXIT_FAILURE)"];
     B --> E["Si argv[1] es here_doc y argc != 6"];
@@ -312,14 +312,17 @@ graph LR;
     F --> G["***here_doc*** (pipex_bonus.c): configura y ejecuta e here_doc en un proceso hijo"];
     G --> H["Crea un pipe con ***do_pipe*** ()"];
     H --> I["Si pipe() o fork() < 1"];
-    I --> D;
+    I --> Ñ["Mensaje error y exit (EXIT_FAILURE)"];
     G --> J["En el proceso hijo cierra el prev_pipefd[0] (extremo de lectura) y utiliza ***get_next_line*** (./my_libft) para leer las líneas del stdin hasta el delimitador (argv[2]) y escribirlas en prev_pipefd[1] (el extremo de escritura)"];
     G --> K["En el proceso padre cierra prev_pipefd[1] y redirecciona el stdin a a prev_pipefd[0] (extremo de lectura). Luego waitpid() para esperar a que termine el proceso hijo."];
-    A --> L["En el resto de los casos llamamos a ***first_process_infile*** (pipex_bonus) 
+    A --> L["En el resto de los casos llamamos a ***first_process_infile*** (pipex_bonus)"];
+    L --> M["Hace exactamente lo mismo que ***child_process** (pipex.c) de la parte no bonus"];
+    A --> N["Después, ***process_cmds*** (main_bonus.c): empieza por argv[2] o argv[3] dependiendo de si es here_doc o no. Entra en un bucle que hace pipes para cada argumento hasta el último. Los argumentos intermedios los pasa a ***inter_process*** (con el prev_pipefd y el pipefd) y el final a ***last_process*** "];
+  N --> O["***inter_process*** (pipex_bonus.c): espera "];
 
    
 style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
-
+style Ñ fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 
 ```
 
