@@ -45,16 +45,16 @@ El proyecto consiste en crear un programa que se ejecute de la siguiente manera:
 
 | ***perror()***   |          |
 |------------------|-----------------|
-| ¿Qué hace?      | Imprime un mensaje de error en la salida de error estándar (stderr). <br> Muestra un mensaje personalizado junto con la descripción del error <br> correspondiente a errno (variable global que almacena códigos de error <br> específicos de la última operación fallida).|
+| ¿Qué hace?      | Imprime un mensaje de error en stderr. <br> Muestra un mensaje personalizado junto con la descripción del error <br> correspondiente a errno.|
 | Prototipo         | void perror(const char *s)|
-| Argumentos       |s: Mensaje personalizado que se imprimirá antes de la descripción del error. <br> Si s es NULL o una cadena vacía, solo se muestra la descripción del error.|
+| Argumentos       |s: Mensaje personalizado a imprimir antes de la descripción del error.|
 
 | ***strerror()***   |          |
 |------------------|-----------------|
 | ¿Qué hace?      | Convierte el valor de errno en un mensaje de error. |
 | Prototipo         | char *strerror(int errnum) |
-| Argumentos       |errnum: código de error que se desea convertir en un mensaje de error. <br> Típicamente es el valor de errno después de una operación fallida.|
-| Return   | Devuelve un puntero a una cadena de caracteres con el mensaje de error <br> correspondiente al valor de errnum.|
+| Argumentos       |errnum: código de error a convertir en un mensaje de error. <br> Típicamente es el valor de errno después de una operación fallida.|
+| Return   | Devuelve un puntero a una cadena con el mensaje de error <br> correspondiente al valor de errnum.|
 
   NOTA PERSONAL
 
@@ -69,23 +69,23 @@ El proyecto consiste en crear un programa que se ejecute de la siguiente manera:
 
 | ***dup()***   |          |
 |------------------|-----------------|
-| ¿Qué hace?      |Duplica descriptores de archivo. Útil para redirigir entradas y salidas, <br> especialmente en los procesos que necesitan manipular la stdin, la stdout o la stderr.|
+| ¿Qué hace?      |Duplica fds. Útil para redirigir entradas y salidas, especialmente en procesos <br> que necesitan manipular la stdin, la stdout o la stderr.|
 | Prototipo         |int dup(int oldfd)|
 | Argumentos       |oldfd: file descriptor que se desea duplicar.|
-| Return   | Devuelve el nuevo fd duplicado o 1 en caso de error, estableciendo errno. <br> El nuevo fd apunta al mismo archivo que oldfd, compartiendo el mismo puntero <br> de archivo y heredando los mismos permisos de acceso.|
+| Return   | Devuelve el nuevo fd duplicado o 1 en caso de error, estableciendo errno. <br> El nuevo fd apunta al mismo archivo que oldfd, comparten el mismo puntero <br> de archivo y hereda los mismos permisos de acceso.|
 
 | ***dup2()***   |          |
 |------------------|-----------------|
-| ¿Qué hace?      |Duplica un fd permitiendo especificar en qué nuevo fd queremos que se duplique.|
+| ¿Qué hace?      |Duplica un fd en un nuevo fd.|
 | Prototipo         |int dup(int oldfd, int newfd)|
-| Argumentos       |oldfd: file descriptor que se desea duplicar. <br> newfd: nuevo file descriptor. <br> Si newfd está en uso, dup2 lo cierra antes de duplicar oldfd en él.|
+| Argumentos       |oldfd: fd que se desea duplicar. <br> newfd: nuevo fd. <br> Si newfd está en uso, dup2 lo cierra antes de duplicar oldfd en él.|
 | Return   | Devuelve newfd o -1 en caso de error.|
 
 | ***execve()***   |          |
 |------------------|-----------------|
 | ¿Qué hace?      |Reemplaza el proceso actual con un nuevo programa. <br> Se utiliza para ejecutar un programa especificado en un archivo ejecutable, <br> con el entorno y los argumentos que se le proporcionan.  |
 | Prototipo         |int execve(const char *filename, char *const argv[], char *const envp[])|
-| Argumentos       |filename: ruta del archivo ejecutable que queremos ejecutar. <br> argv: array de cadenas que representan los argumentos del programa.  <br> envp: array de cadenas que contiene las variables de entorno.|
+| Argumentos       |filename: ruta del archivo ejecutable. <br> argv: array de cadenas que representan los argumentos del programa.  <br> envp: array de cadenas que contiene las variables de entorno.|
 | Return   | En caso de éxito, no devuelve nada; el proceso actual se reemplaza por el nuevo programa <br> y la ejecución continúa desde el punto de entrada del nuevo programa. <br> En caso de error devuelve -1 y establece errno.|
 
 | ***exit()***   |          |
