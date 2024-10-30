@@ -86,7 +86,7 @@ El proyecto consiste en crear un programa que se ejecute de la siguiente manera:
 | ¿Qué hace?      |Reemplaza el proceso actual con un nuevo programa. <br> Se utiliza para ejecutar un programa especificado en un archivo ejecutable, <br> con el entorno y los argumentos que se le proporcionan.  |
 | Prototipo         |int execve(const char *filename, char *const argv[], char *const envp[])|
 | Argumentos       |filename: ruta del archivo ejecutable. <br> argv: array de cadenas que representan los argumentos del programa.  <br> envp: array de cadenas que contiene las variables de entorno.|
-| Return   | En caso de éxito, no devuelve nada; el proceso actual se reemplaza por el nuevo programa <br> y la ejecución continúa desde el punto de entrada del nuevo programa. <br> En caso de error devuelve -1 y establece errno.|
+| Return   | En caso de éxito, no devuelve nada; el proceso actual se reemplaza <br> por el nuevo programa y la ejecución continúa desde el punto de entrada <br> del nuevo programa. En caso de error devuelve -1 y establece errno.|
 
 | ***exit()***   |          |
 |------------------|-----------------|
@@ -97,7 +97,7 @@ El proyecto consiste en crear un programa que se ejecute de la siguiente manera:
 
 | ***fork()***   |          |
 |------------------|-----------------|
-| ¿Qué hace?      |Genera un nuevo proceso hijo a partir de un proceso padre. <br> El proceso hijo es una copia del proceso padre, pero tiene un identificador de proceso (PID) único. <br> El proceso padre y el proceso hijo se ejecutan simultáneamente, <br> aunque pueden comportarse de manera diferente.|
+| ¿Qué hace?      |Genera un nuevo proceso hijo a partir de un proceso padre. <br> El proceso hijo es una copia del proceso padre, pero tiene su propio PID <br> (indentificador de proceso). El proceso padre y el proceso hijo <br> se ejecutan simultáneamente,  aunque pueden comportarse de manera diferente.|
 | Prototipo         | fd_t fork(void) |
 | Return   | En el proceso padre, fork() devuelve el PID del proceso hijo. <br> El el proceso hijo, fork() devuelve 0. <br> Si fork() falla, devuelve -1 en el proceso padre y no crea ningún proceso hijo.|
 
@@ -117,7 +117,7 @@ El proyecto consiste en crear un programa que se ejecute de la siguiente manera:
 
 | ***pipe()***   |          |
 |------------------|-----------------|
-| ¿Qué hace?      |Crea un canal de comunicación unidireccional entre procesos. <br> Permite que un proceso (el escritor) envíe datos a otro proceso (el lector) a través de un buffer de memoria. <br> La función pipe() crea un array de dos file descriptors que representan los extremos del pipe. <br> - pipefd[0]: extremo de lectura. <br> - pipefd[1]: extremo de escritura. <br> pipefd[1] escribirá en su fd y pipefd[0] leerá el pipefd[1] y escribirá en su propio fd. |
+| ¿Qué hace?      |Crea un canal de comunicación unidireccional entre procesos. <br> Permite que un proceso (el escritor) envíe datos a otro proceso (el lector) <br> a través de un buffer de memoria. <br> pipe() crea un array de dos fds que representan los extremos del pipe. <br> - pipefd[0]: extremo de lectura. <br> - pipefd[1]: extremo de escritura. <br> pipefd[1] escribirá en su fd y pipefd[0] leerá el pipefd[1] y escribirá en su propio fd. |
 | Prototipo         |int pipe(int pipefd[2])|
 | Return   | Devuelve 0 en caso de éxito y en caso de error devuelve -1 y establece errno.|
 
