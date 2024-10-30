@@ -1,39 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amacarul <amacarul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 15:25:08 by amacarul          #+#    #+#             */
-/*   Updated: 2024/09/21 18:12:19 by amacarul         ###   ########.fr       */
+/*   Created: 2024/09/12 11:56:25 by amacarul          #+#    #+#             */
+/*   Updated: 2024/09/21 18:13:05 by amacarul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *nptr)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	int	pos;
-	int	sign;
-	int	nb;
+	void	*ptr;
 
-	pos = 0;
-	sign = 1;
-	nb = 0;
-	while ((nptr[pos] >= 9 && nptr[pos] <= 13) || nptr[pos] == 32)
-		pos ++;
-	if (nptr[pos] == '+')
-		pos ++;
-	else if (nptr[pos] == '-')
-	{
-		sign = -1;
-		pos ++;
-	}
-	while (nptr[pos] >= '0' && nptr[pos] <= '9')
-	{
-		nb = nb * 10 + (nptr[pos] - '0');
-		pos ++;
-	}
-	return (nb * sign);
+	ptr = malloc(nmemb * size);
+	if (!ptr)
+		return (NULL);
+	ft_bzero(ptr, (nmemb * size));
+	return (ptr);
 }

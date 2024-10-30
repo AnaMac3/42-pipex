@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amacarul <amacarul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 15:25:08 by amacarul          #+#    #+#             */
-/*   Updated: 2024/09/21 18:12:19 by amacarul         ###   ########.fr       */
+/*   Created: 2024/10/14 10:48:39 by amacarul          #+#    #+#             */
+/*   Updated: 2024/10/14 10:49:18 by amacarul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *nptr)
+//String to number (long int)
+long int	ft_atol(const char *nptr)
 {
-	int	pos;
-	int	sign;
-	int	nb;
+	int			pos;
+	int			sign;
+	long int	nb;
 
 	pos = 0;
 	sign = 1;

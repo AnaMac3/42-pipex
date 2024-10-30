@@ -1,39 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amacarul <amacarul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 15:25:08 by amacarul          #+#    #+#             */
-/*   Updated: 2024/09/21 18:12:19 by amacarul         ###   ########.fr       */
+/*   Created: 2024/09/11 18:16:18 by amacarul          #+#    #+#             */
+/*   Updated: 2024/09/23 12:39:50 by amacarul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *nptr)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	int	pos;
-	int	sign;
-	int	nb;
+	char		*substr;
+	size_t		pos;
 
+	if (s == NULL)
+		return (NULL);
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	substr = (char *)malloc(len + 1);
+	if (substr == NULL)
+		return (NULL);
 	pos = 0;
-	sign = 1;
-	nb = 0;
-	while ((nptr[pos] >= 9 && nptr[pos] <= 13) || nptr[pos] == 32)
-		pos ++;
-	if (nptr[pos] == '+')
-		pos ++;
-	else if (nptr[pos] == '-')
+	while (pos < len && s[start + pos] != '\0')
 	{
-		sign = -1;
+		substr[pos] = s[start + pos];
 		pos ++;
 	}
-	while (nptr[pos] >= '0' && nptr[pos] <= '9')
-	{
-		nb = nb * 10 + (nptr[pos] - '0');
-		pos ++;
-	}
-	return (nb * sign);
+	substr[pos] = '\0';
+	return (substr);
 }

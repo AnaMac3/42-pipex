@@ -1,39 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_pfstr.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amacarul <amacarul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 15:25:08 by amacarul          #+#    #+#             */
-/*   Updated: 2024/09/21 18:12:19 by amacarul         ###   ########.fr       */
+/*   Created: 2024/09/24 12:46:38 by amacarul          #+#    #+#             */
+/*   Updated: 2024/10/18 12:30:14 by amacarul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *nptr)
+void	ft_pfstr(char *s, size_t *count)
 {
-	int	pos;
-	int	sign;
-	int	nb;
+	int		i;
+	char	*null_str;
 
-	pos = 0;
-	sign = 1;
-	nb = 0;
-	while ((nptr[pos] >= 9 && nptr[pos] <= 13) || nptr[pos] == 32)
-		pos ++;
-	if (nptr[pos] == '+')
-		pos ++;
-	else if (nptr[pos] == '-')
+	null_str = "(null)";
+	if (s == NULL)
 	{
-		sign = -1;
-		pos ++;
+		while (*null_str != '\0')
+		{
+			ft_pfchar(*null_str, count);
+			null_str ++;
+		}
+		return ;
 	}
-	while (nptr[pos] >= '0' && nptr[pos] <= '9')
+	i = 0;
+	while (s[i] != '\0')
 	{
-		nb = nb * 10 + (nptr[pos] - '0');
-		pos ++;
+		ft_pfchar(s[i], count);
+		i ++;
 	}
-	return (nb * sign);
 }
