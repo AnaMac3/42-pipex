@@ -145,7 +145,7 @@ El proyecto consiste en crear un programa que se ejecute de la siguiente manera:
 Usar waitpid() es esencial para evitar que los procesos hijos se conviertan en zombies. Cada vez que un hijo termina, si el padre no lo recoge, este proceso hijo permanece en la tabla de procesos como un proceso zombie hasta que el padre llame a una de estas funciones. Un proceso zombie es un proceso que ha temrinado su ejecución pero todavía tiene una entrada en la tabla de procesos del sistema.
 Comprobar procesos zomies: despues de ejecutar tu programa, usar comando *ps aux | grep pipex* y ver si hay alguna 'Z' en la columna de estado (la octava columna). La columna de estado mostrará una Z indicando que el proceso está en estado zombie.
 
-**Parte bonus:**
+### Bonus:
 
 Gestionar múltiples pipes.
 
@@ -240,7 +240,7 @@ style R fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 
 ```
 
-### Flujo de parte bonus
+### Flujo de bonus
 
 ```mermaid
 graph LR;
