@@ -311,7 +311,11 @@ graph LR;
     A --> F["Si argv[1] es here_doc"];
     F --> G["***here_doc*** (pipex_bonus.c): configura y ejecuta e here_doc en un proceso hijo"];
     G --> H["Crea un pipe con ***do_pipe*** ()"];
-    G --> I["Si p == 0"];
+    H --> I["Si pipe() o fork() < 1"];
+    I --> D;
+    G --> J["En el proceso hijo cierra el prev_pipefd[0] (extremo de lectura) y utiliza ***get_next_line*** (./my_libft) para leer las líneas del stdin hasta el delimitador (argv[2]) y escribirlas en prev_pipefd[1] (el extremo de escritura)"];
+    G --> K["En el proceso padre cierra prev_pipefd[1] y redirecciona el stdin a a prev_pipefd[0] (extremo de lectura). Luego waitpid() para esperar a que termine el proceso hijo."];
+    A --> L["En el resto de los casos llamamos a ***first_process_infile*** (pipex_bonus) 
 
    
 style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
