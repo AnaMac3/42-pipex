@@ -17,128 +17,84 @@ Toma el contenido de infile y lo envía como entrada estándar (stdin) al cmd1. 
 
 ### Explicación de las funciones autorizadas
 
-***open()***
+| ***open()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      | Abre un archivo y obtiene su descriptor de archivo (file descriptor - fd) (número entero que representa el archivo abierto en el sistema operativo).           |
+| Prototipo         | int open(const char *pathname, int flags, mode_t mode)              |
+| Argumentos       |   pahtname: ruta del archivo. <br> flags: entero que especifica el modo en el que se abre el archivo. Algunos modos comunes: <br>   - O_RDONLY: solo lectura. <br> - O_WRONLY: solo escritura. <br> - O_RDWR: lectura y escritura. <br> - O_CREAT: crea el archivo si no existe. <br> - O_TRUNC: si el archivo existe, trunca su tamaño a 0, es decir, elimina su contenido. <br> - O_APPEND: escribe al final del archivo sin truncarlo. <br> mode: solo se utiliza con O_CREAT. Se establecen los permisos del archivo, expresados en octal.     |
+| Return   | Devuelve un file descriptor (número entero) en caso de éxito y -1 en caso de error.       |
 
-Abre un archivo y obtiene su descriptor de archivo (file descriptor - fd) (número entero que representa el archivo abierto en el sistema operativo). 
 
-Prototipo: int open(const char *pathname, int flags, mode_t mode)
+| ***close()***   |                 |
+|------------------|-----------------|
+| ¿Qué hace?      | Cierra un archivo que ha sido abierto mediante open(). Al cerrarlo, el sistema libera el file descriptor y cualquier recurso asociado, permitiendo que el sistema operativo reutilice el descriptor para otras operaciones.|
+| Prototipo         | Prototipo: int close(int fd)|
+| Return   | Devuelve 0 si el archivo se cierra correctamente y -1 y errno en caso de error.|
 
-  - pahtname: ruta del archivo.
-  - flags: entero que especifica el modo en el que se abre el archivo. Algunos modos comunes:
-      - O_RDONLY: solo lectura.
-      - O_WRONLY: solo escritura.
-      - O_RDWR: lectura y escritura.
-      - O_CREAT: crea el archivo si no existe.
-      - O_TRUNC: si el archivo existe, trunca su tamaño a 0, es decir, elimina su contenido.
-      - O_APPEND: escribe al final del archivo sin truncarlo.
-  - mode: solo se utiliza con O_CREAT. Se establecen los permisos del archivo, expresados en octal. Por ejemplo, 0644 indica: permisos de lectura y escritura para el propietario, solo lectura para el grupo y solo lectura para otros. 
-    
-Devuelve un file descriptor (número entero) en caso de éxito y -1 en caso de error.
+| ***read()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      | Lee datos desde un archivo (a partir de su fd) o entrada (como stdin).|
+| Prototipo         |ssize_t read (int fd, void *buffer, size_t count) |
+| Argumentos       |fd: descriptor de archivo desde el que se quiere leer. Se trata del entero obtenido mediante open() o dup() o un descritor estándar como 0 (stdin).<br> buffer: puntero a un buffer (o espacio de memoria) donde se almacenarán los datos leídos. <br> count: número máximo de bytes que se intentarán leer.|
+| Return   | Devuelve el número de bytes leídos, que pueden ser menos que count si se llega al final del archivo o si hay menos datos disponibles en la entrada. Si se alcanza el final del archivo (EOF), devuelve 0. Devuelve -1 y establece errno en caso de error.|
 
-***close()***
+| ***perror()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      | Imprime un mensaje de error en la salida de error estándar (stderr). Muestra un mensaje personalizado junto con la descripción del error correspondiente a errno (variable global que almacena códigos de error específicos de la última operación fallida).|
+| Prototipo         | void perror(const char *s)|
+| Argumentos       |mensaje personalizado que se imprimirá antes de la descripción del error del sistema. Si s es NULL o una cadena vacía, solo se muestra la descripción del error.|
 
-Cierra un archivo que ha sido abierto mediante open(). Al cerrarlo, el sistema libera el file descriptor y cualquier recurso asociado, permitiendo que el sistema operativo reutilice el descriptor para otras operaciones. 
+| ***strerror()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      | Convierte el valor de errno en un mensaje de error legible para los humanos. Devuelve una cadena de texto que describe el error. Útil para mostrar mensajes personalizados en combinación con otras salidas, o cuando prefieres usar tu propio método de impresión en lugar de perror().|
+| Prototipo         | char *strerror(int errnum) |
+| Argumentos       |errnum: código de error que se desea convertir en un mensaje de error. Típicamente es el valor de errno después de una operación fallida.|
+| Return   | Devuelve un puntero a una cadena de caracteres con el mensaje de error correspondiente al valor de errnum.|
 
-Prototipo: int close(int fd)
-
-Devuelve 0 si el archivo se cierra correctamente y -1 y errno en caso de error.
-
-***read()***
-
-Lee datos desde un archivo (a partir de su fd) o entrada (como stdin).
-
-Prototipo: ssize_t read (int fd, void *buffer, size_t count)
-
-  - fd: descriptor de archivo desde el que se quiere leer. Se trata del entero obtenido mediante open() o dup() o un descritor estándar como 0 (stdin).
-  - buffer: puntero a un buffer (o espacio de memoria) donde se almacenarán los datos leídos.
-  - count: número máximo de bytes que se intentarán leer.
-  Devuelve el número de bytes leídos, que pueden ser menos que count si se llega al final del archivo o si hay menos datos disponibles en la entrada. Si se alcanza el final del archivo (EOF), devuelve 0. Devuelve -1 y establece errno en caso de error.
-
-***perror()***
-
-Imprime un mensaje de error en la salida de error estándar (stderr). Muestra un mensaje personalizado junto con la descripción del error correspondiente a errno (variable global que almacena códigos de error específicos de la última operación fallida).
-
-Prototipo: void perror(const char *s)
-
-  - s: mensaje personalizado que se imprimirá antes de la descripción del error del sistema. Si s es NULL o una cadena vacía, solo se muestra la descripción del error.
-
-***strerror()***
-
-Convierte el valor de errno en un mensaje de error legible para los humanos. Devuelve una cadena de texto que describe el error. Útil para mostrar mensajes personalizados en combinación con otras salidas, o cuando prefieres usar tu propio método de impresión en lugar de perror().
-
-Prototipo: char *strerror(int errnum)
-
-  - errnum: código de error que se desea convertir en un mensaje de error. Típicamente es el valor de errno después de una operación fallida.
-
-Devuelve un puntero a una cadena de caracteres con el mensaje de error correspondiente al valor de errnum.
-
-  **NOTA PERSONAL**
+  NOTA PERSONAL
 
   Con tal de que mis mensajes error sean lo más parecidos posibles a los mensajes error del comando *< file1 cmd1 | cmd2 > file2* , he decidido imprimir mis mensajes personalizados con ft_putstr_fd en vez de utilizar perror() y strerror().
 
-***access()***
+| ***access()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Comprueba la accesibilidad de un archivo o directorio. |
+| Prototipo         |int access(const char *pathname, int mode)|
+| Argumentos       |pahtname: cadena que representa la ruta. <br> mode: entero que especifica el tipo de acceso que queremos verificar. <br> - F_OK: verifica la existencia del archivo. <br> - F_OK: verifica la existencia del archivo. <br> - R_OK: accesible para lectura. <br> - W_OK: accesible para escritura. <br>  - X_OK: accesible para ejecución.|
+| Return   | Devuelve 0 en si el acceso especificado está permitido. o -1 y errno en caso contrario.|
 
-Comprueba la accesibilidad de un archivo o directorio. 
+| ***dup()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Duplica descriptores de archivo. Útil para redirigir entradas y salidas, especialmente en los procesos que necesitan manipular la entrada estándar (stdin), la salida estándar (stdout) o la salida de error estándar (stderr).|
+| Prototipo         |int dup(int oldfd)|
+| Argumentos       |oldfd: file descriptor que se desea duplicar.|
+| Return   | Devuelve el nuevo descritor de archivo duplicado o 1 en caso de error, estableciendo errno. El nuevo descritor de archivo apunta al mismo archivo que oldfd, compartiendo el mismo puntero de archivo y heredando los mismos permisos de acceso.|
 
-Prototipo: int access(const char *pathname, int mode)
+| ***dup2()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Permite duplicar un file descriptor y también especificar en qué número de file descriptor queremos que se duplique.|
+| Prototipo         |int dup(int oldfd, int newfd)|
+| Argumentos       |oldfd: file descriptor que se desea duplicar. <br> newfd: nuevo file descriptor. Si newfd está en uso, dup2 lo cierra antes de duplicar oldfd en él.|
+| Return   | Devuelve el nuevos file descriptor, es decir, newfd, o -1 en caso de error.|
 
-  - pahtname: cadena que representa la ruta.
-  - mode: entero que especifica el tipo de acceso que queremos verificar.
-      - F_OK: verifica la existencia del archivo. 
-      - R_OK: accesible para lectura.
-      - W_OK: accesible para escritura.
-      - X_OK: accesible para ejecución.
+| ***execve()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Reemplaza el proceso actual con un nuevo programa. Se utiliza para ejecutar un programa especificado en un archivo ejecutable, con el entorno y los argumentos que se le proporcionan.  |
+| Prototipo         |int execve(const char *filename, char *const argv[], char *const envp[])|
+| Argumentos       |filename: ruta del archivo ejecutable que queremos ejecutar. <br> argv: arreglo de punteros a cadenas de caracteres que representan los argumentos del programa. Generalmente, argv[0] almacena el nombre del programa y el último elemeneto debe ser NULL. <br> envp: arreglo de punteros a cadenas de caracteres que contiene las variables de entorno.|
+| Return   | En caso de éxito, no devuelve nada; el proeso actual se reemplaza por el nuevo programa y la ejecución continúa desde el punto de entrada del nuevo programa. En caso de error devuelve -1 y establece errno.|
 
-Devuelve 0 en si el acceso especificado está permitido. o -1 y errno en caso contrario.
+| ***exit()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Termina un programa de manera controlada. Permite salir de un programa con un código de estado que indica si la salida fue exitosa o si ocurrió un error.|
+| Prototipo         | void exit(int status) |
+| Argumentos       |status: entero que se devuelve al sistema operativo cuando el programa termina. Este valor puede indicar éxito (0) o error (valor distinto de 0).|
 
-***dup()***
 
-Duplica descriptores de archivo. Útil para redirigir entradas y salidas, especialmente en los procesos que necesitan manipular la entrada estándar (stdin), la salida estándar (stdout) o la salida de error estándar (stderr).
-
-Prototipo: int dup(int oldfd)
-
-  - oldfd: file descriptor que se desea duplicar.
-
-Devuelve el nuevo descritor de archivo duplicado o 1 en caso de error, estableciendo errno. El nuevo descritor de archivo apunta al mismo archivo que oldfd, compartiendo el mismo puntero de archivo y heredando los mismos permisos de acceso.
-
-***dup2()***
-
-Permite duplicar un file descriptor y también especificar en qué número de file descriptor queremos que se duplique.
-
-Prototipo: int dup(int oldfd, int newfd)
-
-  - oldfd: file descriptor que se desea duplicar.
-  - newfd: nuevo file descriptor. Si newfd está en uso, dup2 lo cierra antes de duplicar oldfd en él.
-
-Devuelve el nuevos file descriptor, es decir, newfd, o -1 en caso de error.
-
-***execve()***
-
-Reemplaza el proceso actual con un nuevo programa. Se utiliza para ejecutar un programa especificado en un archivo ejecutable, con el entorno y los argumentos que se le proporcionan.  
-
-Prototipo: int execve(const char *filename, char *const argv[], char *const envp[])
-
-  - filename: ruta del archivo ejecutable que queremos ejecutar.
-  - argv: arreglo de punteros a cadenas de caracteres que representan los argumentos del programa. Generalmente, argv[0] almacena el nombre del programa y el último elemeneto debe ser NULL.
-  - envp: arreglo de punteros a cadenas de caracteres que contiene las variables de entorno.
-
-En caso de éxito, no devuelve nada; el proeso actual se reemplaza por el nuevo programa y la ejecución continúa desde el punto de entrada del nuevo programa. En caso de error devuelve -1 y establece errno.
-
-***exit()***
-
-Termina un programa de manera controlada. Permite salir de un programa con un código de estado que indica si la salida fue exitosa o si ocurrió un error.
-
-Prototipo: void exit(int status)
-
-  - status: entero que se devuelve al sistema operativo cuando el programa termina. Este valor puede indicar éxito (0) o error (valor distinto de 0).
-
-***fork()***
-
-Genera un nuevo proceso hijo a partir de un proceso padre. El proceso hijo es prácticamente una copia del proceso padre, pero tiene un identificador de proceso (PID) único y un identificador de proceso padre (PPID) único. El proceso padre y el proceso hijo se ejecutan simultáneamente, aunque pueden comportarse de manera diferente.
-
-Prototipo: fd_t fork(void)
-
-En el proceso padre, fork() devuelve el PID del proceso hijo. El el proceso hijo, fork() devuelve 0. Si fork() falla, devuelve -1 en el proceso padre y no crea ningún proceso hijo.
+| ***fork()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Genera un nuevo proceso hijo a partir de un proceso padre. El proceso hijo es prácticamente una copia del proceso padre, pero tiene un identificador de proceso (PID) único y un identificador de proceso padre (PPID) único. El proceso padre y el proceso hijo se ejecutan simultáneamente, aunque pueden comportarse de manera diferente.|
+| Prototipo         | fd_t fork(void) |
+| Return   | En el proceso padre, fork() devuelve el PID del proceso hijo. El el proceso hijo, fork() devuelve 0. Si fork() falla, devuelve -1 en el proceso padre y no crea ningún proceso hijo.|
 
     Ejemplo:
     pid_t pid;
@@ -154,51 +110,32 @@ En el proceso padre, fork() devuelve el PID del proceso hijo. El el proceso hijo
     else //otro número positivo
       //Estamos en el proceso padre
 
-***pipe()***
+| ***pipe()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Crea un canal de comunicación unidireccional entre procesos. Permite que un proceso (el escritor) envíe datos a otro proceso (el lector) a través de un buffer de memoria. La función pipe() crea un array de dos file descriptors que representan los extremos del pipe. <br> - pipefd[0]: extremo de lectura. <br> - pipefd[1]: extremo de escritura. <br> pipefd[1] escribirá en su fd y pipefd[0] leerá el pipefd[1] y escribirá en su propio fd. |
+| Prototipo         |int pipe(int pipefd[2])|
+| Return   | Devuelve 0 en caso de éxito y en caso de error devuelve -1 y establece errno.|
 
-Crea un canal de comunicación unidireccional entre procesos. Permite que un proceso (el escritor) envíe datos a otro proceso (el lector) a través de un buffer de memoria. La función pipe() crea un array de dos file descriptors que representan los extremos del pipe.
-  - pipefd[0]: extremo de lectura.
-  - pipefd[1]: extremo de escritura.
-  pipefd[1] escribirá en su fd y pipefd[0] leerá el pipefd[1] y escribirá en su propio fd.
+| ***unlink()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Elimina un nombre de archivos del sistema de archivos, lo que significa que el archivo ya no es accesible mediante ese nombre. Pero el archivo no se elimina físicamente hasta que no haya más referencias a él. <br> Concepto de contabilidad de enlaces: cada arhcivo en Unix/Linux tiene un contador de enlaces. Si el contador llega a 0 significa que no hay más nombres de archivo apuntando a los datos del archivo y el contenido se libera. Si aún hay otros nombres de archivo apuntando al mismo contenido, el archivo permanece en el disco. |
+| Prototipo         |int unlink(const char *pathname)|
+| Argumentos       |pathname: ruta del archivo a eliminar.|
+| Return   | Devuelve 0 en caso de éxito y -1 y errno en caso de error. Para eliminar un archivo, el proceso debe tener los permisos adecuados. Si no se tienen o el archivo está en uso, unlink() fallará. Si el archivo está abierto al llamar a unlink(), su contenido no se eliminará hasta que todos los fd de archivo que apuntan a él sean cerrados. |
 
-Prototipo: int pipe(int pipefd[2])
+| ***wait()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Permite que un proceso padre suspenda su ejecución hasta que uno de sus procesos hijo termine. Cuando un proceso hijo finaliza, wait() recupera su estado de salida, lo que permite al proceso padre realizar tareas específicas dependiendo del resultado de la ejecución del hijo. |
+| Prototipo         |pid_t wait(int *status)|
+| Argumentos       |status: puntero a un entero donde wait() almacena el estado de salida del hijo. Este valor sirve para obtener información sobre cómo terminó el proceso hijo, normalmente mediante macros como WIFEXITED o WEXITSTATUS...|
+| Return   | Devuelve el PID del hijo que terminó en caso de éxito. Si no hay hijos a los que esperar, devuelve -1 y establece errno.|
 
-Devuelve 0 en caso de éxito y en caso de error devuelve -1 y establece errno.
-
-***unlink()***
-
-Elimina un nombre de archivos del sistema de archivos, lo que significa que el archivo ya no es accesible mediante ese nombre. Pero el archivo no se elimina físicamente hasta que no haya más referencias a él. 
-
-Concepto de contabilidad de enlaces: cada arhcivo en Unix/Linux tiene un contador de enlaces. Si el contador llega a 0 significa que no hay más nombres de archivo apuntando a los datos del archivo y el contenido se libera. Si aún hay otros nombres de archivo apuntando al mismo contenido, el archivo permanece en el disco. 
-
-Prototipo: int unlink(const char *pathname)
-  - pathname: ruta del archivo a eliminar.
-
-Devuelve 0 en caso de éxito y -1 y errno en caso de error.
-
-Para eliminar un archivo, el proceso debe tener los permisos adecuados. Si no se tienen o el archivo está en uso, unlink() fallará. Si el archivo está abierto al llamar a unlink(), su contenido no se eliminará hasta que todos los fd de archivo que apuntan a él sean cerrados. 
-
-***wait()***
-
-Permite que un proceso padre suspenda su ejecución hasta que uno de sus procesos hijo termine. Cuando un proceso hijo finaliza, wait() recupera su estado de salida, lo que permite al proceso padre realizar tareas específicas dependiendo del resultado de la ejecución del hijo.
-
-Prototipo: pid_t wait(int *status)
-
-  - status: puntero a un entero donde wait() almacena el estado de salida del hijo. Este valor sirve para obtener información sobre cómo terminó el proceso hijo, normalmente mediante macros como WIFEXITED o WEXITSTATUS...
-
-Devuelve el PID del hijo que terminó en caso de éxito. Si no hay hijos a los que esperar, devuelve -1 y establece errno.
-
-***waitpid()***
-
-Permite que un proceso padre espere a que un proceso hijo termine su ejecución. Es más flexible que wait porque permite especificar a qué proceso hijo se debe esperar. Útil cuando hay múltiples procesos hijo.
-
-Prototipo: pid_t waitpid(pid_t pid, int *status, int options)
-
-  - pid: puede ser el PID del proceso hijo al que se quiere esperar (un número positivo). Si es -1 indica que se espera a cualquier proceso hijo (comportamiento similar a wait()). Si es 0 espera a cualquier proceso hijo del mismo grupo de procesos. Si es otro valor negativo, espera a cualquier hijo cuyo grupo de procesos sea el mismo que el del proceso padre.
-  - status: puntero a un entero donde wait() almacena el estado de salida del hijo. Este valor sirve para obtener información sobre cómo terminó el proceso hijo, normalmente mediante macros como WIFEXITED o WEXITSTATUS...
-  - options: 0 indica el comportamiento estándar, espera a que el hijo termine. WNOHANG no bloquea, si no hay hijos que no hayan terminado, retorna inmediatamente. WUNTRACED también retorna si un hijo está detenido.
-
-Devuelve el PID del hijo que terminó en caso de éxito. En caso de error, devuelve -1 y establece errno.
+| ***waitpid()***   |          |
+|------------------|-----------------|
+| ¿Qué hace?      |Permite que un proceso padre espere a que un proceso hijo termine su ejecución. Es más flexible que wait porque permite especificar a qué proceso hijo se debe esperar. Útil cuando hay múltiples procesos hijo. |
+| Prototipo         |pid_t waitpid(pid_t pid, int *status, int options)|
+| Argumentos       |spid: puede ser el PID del proceso hijo al que se quiere esperar (un número positivo). Si es -1 indica que se espera a cualquier proceso hijo (comportamiento similar a wait()). Si es 0 espera a cualquier proceso hijo del mismo grupo de procesos. Si es otro valor negativo, espera a cualquier hijo cuyo grupo de procesos sea el mismo que el del proceso padre. <br> status: puntero a un entero donde wait() almacena el estado de salida del hijo. Este valor sirve para obtener información sobre cómo terminó el proceso hijo, normalmente mediante macros como WIFEXITED o WEXITSTATUS... <br> options: 0 indica el comportamiento estándar, espera a que el hijo termine. WNOHANG no bloquea, si no hay hijos que no hayan terminado, retorna inmediatamente. WUNTRACED también retorna si un hijo está detenido. |
+| Return   | Devuelve el PID del hijo que terminó en caso de éxito. En caso de error, devuelve -1 y establece errno.|
 
 Usar waitpid() es esencial para evitar que los procesos hijos se conviertan en zombies. Cada vez que un hijo termina, si el padre no lo recoge, este proceso hijo permanece en la tabla de procesos como un proceso zombie hasta que el padre llame a una de estas funciones. Un proceso zombie es un proceso que ha temrinado su ejecución pero todavía tiene una entrada en la tabla de procesos del sistema.
 Comprobar procesos zomies: despues de ejecutar tu programa, usar comando *ps aux | grep pipex* y ver si hay alguna 'Z' en la columna de estado (la octava columna). La columna de estado mostrará una Z indicando que el proceso está en estado zombie.
@@ -317,8 +254,13 @@ graph LR;
     G --> K["En el proceso padre cierra prev_pipefd[1] y redirecciona el stdin a a prev_pipefd[0] (extremo de lectura). Luego waitpid() para esperar a que termine el proceso hijo."];
     A --> L["En el resto de los casos llamamos a ***first_process_infile*** (pipex_bonus)"];
     L --> M["Hace exactamente lo mismo que ***child_process** (pipex.c) de la parte no bonus"];
-    A --> N["Después, ***process_cmds*** (main_bonus.c): empieza por argv[2] o argv[3] dependiendo de si es here_doc o no. Entra en un bucle que hace pipes para cada argumento hasta el último. Los argumentos intermedios los pasa a ***inter_process*** (con el prev_pipefd y el pipefd) y el final a ***last_process*** "];
-  N --> O["***inter_process*** (pipex_bonus.c): espera "];
+    A --> N["Después, ***process_cmds*** (main_bonus.c)"]
+    N --> O["Empieza por argv[2] o argv[3] dependiendo de si es here_doc o no. Entra en un bucle que hace pipes para cada argumento hasta el último."]
+    N --> P["Los argumentos intermedios los pasa a ***inter_process*** (con el prev_pipefd y el pipefd) y el último argumento a ***last_process*** con el último comando y el prev_pipefd"];
+    P --> Q["***inter_process*** (pipex_bonus.c)"];
+    Q --> R["Espera a que termine cualquier proceso hijo con waitpid(). Cierra los pipefd que no utiliza (el de lectura del pipe actual (pipefd[0]) y el de escritura de pipe previo (prev_pipefd[1])). Redirige stdin al extremo de lectura del pipe previo (prev_pipefd[0]), y redirige el stdout al extremo de escritura del pipe actual (pipefd[1]). Cierra los fds originales depsués de la redirección y llama a ***execute*** (pipex_bonus.c), que es igual al del pipex sin bonus."];
+  N --> S["***last_process*** (pipex_bonus.c): funciona exactamente igual que el ***parent_process*** del pipex sin bonus"];
+  N --> T["Al final del bucle, cierra el extremo de lectura del pipe previo (prev_pipefd[0]) y el extremo de escritura del pipe actual (pipefd[1]). Sustituye el pipe previo por el pipe actual."];
 
    
 style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
