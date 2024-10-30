@@ -3,7 +3,7 @@ Proyecto pipex del cursus 42.
 
 ### Introducción
 
-blablabla
+Estre proyecto trata de redirecciones y pipes. EXPLICAR MÁAS
 
 El programa debe ejecutarse de la siguiente manera: *./pipex infile cmd1 cmd2 outfile*
 Y tiene que emular el comportamiento del comando *< infile cmd1 | cmd2 > outfile*, donde:
