@@ -6,7 +6,7 @@
 /*   By: amacarul <amacarul@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 12:10:47 by amacarul          #+#    #+#             */
-/*   Updated: 2024/10/30 10:57:50 by amacarul         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:23:15 by amacarul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	execute(char *cmd, char **envp, int is_first_cmd);
 void	here_doc(char **argv, int *prev_pipefd);
 void	first_process(char *file1, char *cmd1, int *pipefd, char **envp);
 void	inter_process(char *cmd, int *prev_pipefd, int *pipefd, char **envp);
-void	last_process(char *file2, char *cmd2, int *pipefd, char **envp);
+void	last_process(int argc, char **argv, int *pipefd, char **envp);
 
 //main_bonus.c
 void	first_process_infile(char **argv, int *prev_pipefd, char **envp);
