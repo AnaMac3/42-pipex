@@ -175,43 +175,44 @@ Debe comportarse como: *cmd << LIMITADOR | cmd1 >> file*
 
 ```mermaid
 graph LR;
-    A["***main.c (main.c)***"] --> B["Checkeo de los argumentos."];
+    A["***main.c (main.c)***"] --> B["1 - Checkeo de los argumentos."];
     B --> C["Si argc != 5"];
     C --> D["Mensaje error y exit (EXIT_FAILURE)"];
-    A --> E["Pipe: crea un canal de comunicación entre procesos."];
+    A --> E["2 - Pipe: crea un canal de comunicación entre procesos."];
     E --> F["Si pipe() == -1"];
     F --> D;
-    A --> G["Fork: genera un nuevo proceso hijo a partir de un proceso padre."];
+    A --> G["3 - Fork: genera un nuevo proceso hijo a partir de un proceso padre."];
     G --> H["Si fork() < 0"];
     H --> D;
     H --> I["Si fork() == 1: estamos en el proceso hijo"];
     I --> J["***child_process*** (pipex.c): configura y ejecuta el primer comando en el pipeline"];
     H --> K["Si fork() > 1: estamos en el proceso padre"];
     K --> L["***parent_process*** (pipex.c): configura y ejecuta el último comando en el pipeline"];
-    J --> M["Comprueba los accesos del archivo de entrada"];
+    J --> M["1 - Comprueba los accesos del archivo de entrada"];
     M --> N["Si el archivo no existe o no tiene permisos de lectura"];
     N --> Q["Mensaje error a ***handle_error*** (pipex_utils.c), ***close pipefd*** (pipex_utils.c) y exit (EXIT_FAILURE)"];
-    J --> O["Obtiene el fd del archivo de entrada con open()"];
+    J --> O["2 - Obtiene el fd del archivo de entrada con open()"];
     O --> P["Si fd == -1"];
     P --> Q;
-    J --> R["Cierra el extremo de lectura (pipefd[0]), porque aquí no se usa"];
-    J --> S["Redirige la stdin al fd del archivo de entrada y el stdout al extremo de escritura del pipe (pipefd[1])"];
-    J --> T["Cierra el input original y el pipefd[1] después de la redirección"];
-    J --> U["Llama a ***execute*** para runear el cmd1. El comando lee del stdin redirigido, es decir, del archivo de entrada, y escribe su output en el stdout redirigido, en pipefd[1]"];
-    L --> W["waipid(): espera a que termine el proceos hijo"];
-    L --> X["Abre o crea el archivo de salida con open(), con permisos de escritura y lectura. Si ya existe, lo trunca"];
-    L --> Y["Comprueba los accesos del archivo de salida"];
+    J --> R["3 - Cierra el extremo de lectura (pipefd[0]), porque aquí no se usa"];
+    J --> S["4 - Redirige la stdin al fd del archivo de entrada y el stdout al extremo de escritura del pipe (pipefd[1])"];
+    J --> T["5 - Cierra el input original y el pipefd[1] después de la redirección"];
+    J --> U["6 - Llama a ***execute*** para runear el cmd1. El comando lee del stdin redirigido, es decir, del archivo de entrada, y escribe su output en el stdout redirigido, en pipefd[1]"];
+    L --> W["1 - waipid(): espera a que termine el proceos hijo"];
+    L --> X["2 - Abre o crea el archivo de salida con open(), con permisos de escritura y lectura. Si ya existe, lo trunca"];
+    L --> Y["3 - Comprueba los accesos del archivo de salida"];
     Y --> Z["Si el archivo no tiene permisos de lectura"];
-    Z --> Q;
+    Z --> AF["Mensaje error a ***handle_error*** (pipex_utils.c), ***close pipefd*** (pipex_utils.c) y exit (EXIT_FAILURE)"];
     X --> AA["Si fd == -1"];
-    AA --> Q;
-    L --> AB["Cierra el extremo de escritura pipefd[1] porque aquí no se usa"];
-    L --> AC["Redirige la stdin al extremo de lectura del pipe (pipefd[0]) y el stdout al fd del archivo de salida"];
-    L --> AD["Cierra el pipefd[0] y el output original después de la redirección"];
-    L --> AE["Llama a ***execute*** para runear el cmd2. El comando lee del extremo de lectura (pipefd[0]) y escribe su output en el archivo de salida"];
+    AA --> AF;
+    L --> AB["4 - Cierra el extremo de escritura pipefd[1] porque aquí no se usa"];
+    L --> AC["5 - Redirige la stdin al extremo de lectura del pipe (pipefd[0]) y el stdout al fd del archivo de salida"];
+    L --> AD["6 - Cierra el pipefd[0] y el output original después de la redirección"];
+    L --> AE["7 - Llama a ***execute*** para runear el cmd2. El comando lee del extremo de lectura (pipefd[0]) y escribe su output en el archivo de salida"];
 
 style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 style Q fill:#ffcccb,stroke:#ff0000,stroke-width:1px
+style AF fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 
 ```
 
@@ -241,6 +242,8 @@ style R fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 ```
 
 ### Flujo de bonus
+
+EL BONUS NO LO TUVE 100% BIEN!
 
 ```mermaid
 graph LR;
