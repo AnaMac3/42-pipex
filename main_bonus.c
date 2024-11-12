@@ -28,10 +28,7 @@ void	process_cmds(int argc, char **argv, int *prev_pipefd, char **envp)
 	pid_t	pid;
 	int		i;
 
-	/*if (ft_strcmp(argv[1], "here_doc") == 0)
-		i = 3;
-	else*/
-		i = 2;
+	i = 2;
 	while (i <= argc - 3)
 	{
 		pid = do_pipe(pipefd);
@@ -61,15 +58,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_putstr_fd("	./pipex here_doc cmd cmd1 file\n", 2);
 		exit (EXIT_FAILURE);
 	}
-	/*else if ((ft_strcmp(argv[1], "here_doc") == 0) && argc != 6)
-	{
-		ft_putstr_fd("Usage: ./pipex here_doc cmd cmd1 file\n", 2);
-		exit (EXIT_FAILURE);
-	}
-	if (ft_strcmp(argv[1], "here_doc") == 0)
-		here_doc(argv, pipefd);
-	else*/
-		first_process_infile(argv, pipefd, envp);
+	first_process_infile(argv, pipefd, envp);
 	process_cmds(argc, argv, pipefd, envp);
 	waitpid(-1, NULL, 0);
 	return (0);
