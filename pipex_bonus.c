@@ -39,38 +39,6 @@ void	execute(char *cmd, char **envp, int is_first_cmd)
 	}
 }
 
-/*Set up and execute a here_doc*/
-/*void	here_doc(char **argv, int *prev_pipefd)
-{
-	pid_t	pid;
-	char	*line;
-
-	pid = do_pipe(prev_pipefd);
-	if (pid == 0)
-	{
-		close(prev_pipefd[0]);
-		line = get_next_line(0);
-		while (line && ft_strncmp(line, argv[2], ft_strlen(argv[2])) != 0)
-		{
-			if (*line != '\0')
-			{
-				ft_putstr_fd(line, prev_pipefd[1]);
-				if (line[ft_strlen(line) - 1] != '\n')
-					ft_putchar_fd('\n', prev_pipefd[1]);
-			}
-			free(line);
-			line = get_next_line(0);
-		}
-		free(line);
-		close(prev_pipefd[1]);
-		exit (0);
-	}
-	close(prev_pipefd[1]);
-	dup2(prev_pipefd[0], 0);
-	close(prev_pipefd[0]);
-	waitpid(-1, NULL, 0);
-}*/
-
 /*Set up and execute the first command in a pipeline.*/
 void	first_process(char *file1, char *cmd1, int *pipefd, char **envp)
 {
@@ -108,10 +76,7 @@ void	last_process(int argc, char **argv, int *pipefd, char **envp)
 	
 	cmd = argv[argc - 2];
 	waitpid(-1, NULL, 0);
-	/*if (ft_strcmp(argv[1], "here_doc") == 0)
-		fd = open(argv[argc - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
-	else*/
-		fd = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	fd = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1 || access(argv[argc - 1], W_OK) == -1)
 	{
 		if (fd == -1)
