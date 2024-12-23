@@ -1,11 +1,20 @@
 # **Pipex**
 Proyecto pipex del cursus 42.
 
+## Índice
+
+- [Introducción](#introducción)
+- [Funciones autorizadas](#funciones-autorizadas)
+- [Bonus](#bonus)
+- [Flujo del pipex](#flujo-del-pipex)
+- [Flujo del bonus](#flujo-del-bonus)
+- [Recursos](#recursos)
+
 ### Introducción
 
 Estre proyecto trata de manejo de pipes.
 
-*Pipe*: herramienta que permite redireccionar la salida estándar (stdout) de un proceso a la entrada estándar (stdin) de otro. Facilitan la comunicación, el intercambio de datos, entre procesos relacionados.
+*Pipe*: herramienta que permite redireccionar la salida estándar (stdout) de un proceso a la entrada estándar (stdin) de otro proceso. Facilitan la comunicación, el intercambio de datos, entre procesos relacionados.
 
 El proyecto consiste en crear un programa que se ejecute de la siguiente manera: *./pipex infile cmd1 cmd2 outfile* y emule el comportamiento del comando *< infile cmd1 | cmd2 > outfile*, donde:
   - infile y outfile son nombres de archivos.
