@@ -185,12 +185,15 @@ Debe comportarse como: *cmd << LIMITADOR | cmd1 >> file*
 
 ```mermaid
 graph LR;
-    A["***main.c (main.c)***"] --> B["1 - Checkeo de los argumentos."];
-    B --> C["Si argc != 5"];
-    C --> D["Mensaje error y exit (EXIT_FAILURE)"];
-    A --> E["2 - Pipe: crea un canal de comunicación entre procesos."];
-    E --> F["Si pipe() == -1"];
-    F --> D;
+    A["***main.c***"] --> B["1 - Checkeo de argumentos."];
+    B --> BA["Si argc != 5"];
+    BA --> C["Mensaje error y exit(EXIT_FAILURE)"];
+    A --> E["2 - do_pipe()"];
+    E --> EA["pipe(): crea un canal de comunicación entre dos procesos."];
+    EA -> EAA["Si pipe() == -1"];
+    EAA --> C;
+    E --> EB["fork(): genera un nuevo proceso hijo a partir de un proceso padre."];
+    
     A --> G["3 - Fork: genera un nuevo proceso hijo a partir de un proceso padre."];
     G --> H["Si fork() < 0"];
     H --> D;
