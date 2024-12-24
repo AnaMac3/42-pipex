@@ -12,9 +12,9 @@ Proyecto pipex del cursus 42.
 
 ### Introducción
 
-Estre proyecto trata de manejo de pipes.
+Estre proyecto va sobre el manejo de pipes.
 
-*Pipe*: herramienta que permite redireccionar la salida estándar (stdout) de un proceso a la entrada estándar (stdin) de otro proceso. Facilitan la comunicación, el intercambio de datos, entre procesos relacionados.
+*Pipe*: herramienta que permite redireccionar la salida estándar (stdout) de un proceso a la entrada estándar (stdin) de otro proceso. Permite la comunicación, el intercambio de datos, entre procesos relacionados.
 
 El proyecto consiste en crear un programa que se ejecute de la siguiente manera: *./pipex infile cmd1 cmd2 outfile* y emule el comportamiento del comando *< infile cmd1 | cmd2 > outfile*, donde:
   - infile y outfile son nombres de archivos.
@@ -22,11 +22,11 @@ El proyecto consiste en crear un programa que se ejecute de la siguiente manera:
 
 ¿Qué hace este comando? 
 
-  - Toma el contenido de infile y lo envía como entrada estándar (stdin) al cmd1. Equivalente a *cmd1 < infile*.
+  - Toma el contenido de infile y lo envía como entrada al cmd1. Equivalente a *cmd1 < infile*.
 
-  - El pipe (|) conecta la salida estándar (stdout) del cmd1 con la entrada (stdin) del cmd2. El resultado de ejecutar el cmd1 se pasa directamente al cmd2 sin guardarlo en un archivo temporal. Así, se ejecutan dos comandos en cadena.
+  - El pipe (|) conecta la salida del cmd1 con la entrada del cmd2. El resultado de ejecutar el cmd1 se pasa directamente al cmd2 sin guardarlo en un archivo temporal. Así, se ejecutan dos comandos en cadena.
 
-  - La salida estándar de cmd2 se guarda en outfile. Si el archivo existe, se sobreescribe; si no, se crea uno nuevo. En lugar de mostrar los resultados por pantalla, se rederigen a outfile.
+  - La salida de cmd2 se guarda en outfile. Si el archivo existe, se sobreescribe; si no, se crea uno nuevo.
 
 
 ### Funciones autorizadas
@@ -153,7 +153,7 @@ El proyecto consiste en crear un programa que se ejecute de la siguiente manera:
 
 Usar waitpid() es esencial para evitar que los procesos hijos se conviertan en zombies. Cada vez que un hijo termina, si el padre no lo recoge, este proceso hijo permanece en la tabla de procesos como un proceso zombie hasta que el padre llame a una de estas funciones. Un proceso zombie es un proceso que ha temrinado su ejecución pero todavía tiene una entrada en la tabla de procesos del sistema.
 
-Comprobar procesos zomies: despues de ejecutar tu programa, usar comando *ps aux | grep pipex* y ver si hay alguna 'Z' en la columna de estado (la octava columna). La columna de estado mostrará una Z indicando que el proceso está en estado zombie.
+Cómo comprobar procesos zomies: despues de ejecutar el programa, usar comando *ps aux | grep pipex* y ver si hay alguna 'Z' en la columna de estado (la octava columna). La columna de estado mostrará una Z indicando que el proceso está en estado zombie.
 
 ### Bonus:
 
