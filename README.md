@@ -190,20 +190,20 @@ graph LR;
     BA --> C["Mensaje error y exit(EXIT_FAILURE)"];
     A --> E["2 - do_pipe()"];
     E --> EA["pipe(): crea un canal de comunicación entre dos procesos."];
-    EA -> EAA["Si pipe() == -1"];
+    EA --> EAA["Si pipe() == -1"];
     EAA --> C;
     E --> EB["fork(): genera un nuevo proceso hijo a partir de un proceso padre."];
     
     A --> G["3 - Fork: genera un nuevo proceso hijo a partir de un proceso padre."];
     G --> H["Si fork() < 0"];
-    H --> D;
-    H --> I["Si fork() == 1: estamos en el proceso hijo"];
-    I --> J["***child_process*** (pipex.c): configura y ejecuta el primer comando en el pipeline"];
-    H --> K["Si fork() > 1: estamos en el proceso padre"];
-    K --> L["***parent_process*** (pipex.c): configura y ejecuta el último comando en el pipeline"];
+    H --> C;
+    G --> I["Si fork() == 1: estamos en el proceso hijo"];
+    I --> J["***child_process***: configura y ejecuta el primer comando en el pipeline"];
+    G --> K["Si fork() > 1: estamos en el proceso padre"];
+    K --> L["***parent_process***: configura y ejecuta el último comando en el pipeline"];
     J --> M["1 - Comprueba los accesos del archivo de entrada"];
     M --> N["Si el archivo no existe o no tiene permisos de lectura"];
-    N --> Q["Mensaje error a ***handle_error*** (pipex_utils.c), ***close pipefd*** (pipex_utils.c) y exit (EXIT_FAILURE)"];
+    N --> Q["Mensaje error a ***handle_error***, ***close_pipefd*** y exit (EXIT_FAILURE)"];
     J --> O["2 - Obtiene el fd del archivo de entrada con open()"];
     O --> P["Si fd == -1"];
     P --> Q;
@@ -215,7 +215,7 @@ graph LR;
     L --> X["2 - Abre o crea el archivo de salida con open(), con permisos de escritura y lectura. Si ya existe, lo trunca"];
     L --> Y["3 - Comprueba los accesos del archivo de salida"];
     Y --> Z["Si el archivo no tiene permisos de lectura"];
-    Z --> AF["Mensaje error a ***handle_error*** (pipex_utils.c), ***close pipefd*** (pipex_utils.c) y exit (EXIT_FAILURE)"];
+    Z --> AF["Mensaje error a ***handle_error***, ***close pipefd*** y exit (EXIT_FAILURE)"];
     X --> AA["Si fd == -1"];
     AA --> AF;
     L --> AB["4 - Cierra el extremo de escritura pipefd[1] porque aquí no se usa"];
@@ -223,23 +223,22 @@ graph LR;
     L --> AD["6 - Cierra el pipefd[0] y el output original después de la redirección"];
     L --> AE["7 - Llama a ***execute*** para runear el cmd2. El comando lee del extremo de lectura (pipefd[0]) y escribe su output en el archivo de salida"];
 
-style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
+style C fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 style Q fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 style AF fill:#ffcccb,stroke:#ff0000,stroke-width:1px
-
 ```
 
 ```mermaid
 graph LR;
   A["***execute*** (pipex.c): "] --> B["Splitea el comando"];
   B --> C["Si el split da NULL o el primer elemento del array es nulo"];
-  C --> D["***handle_cmd_error*** (pipex_utils.c): mensaje error y libera el array de argumentos. Si era el primer comando, cierra el stdout y exit (EXIT_FAILURE)"];
-  A --> E["***get_path*** (get_path.c): obtiene el ejecutable para un comando."];
-  E --> F["***get_path_from_envp*** (get_path.c): obtiene la ruta del array de la variable de entorno"];
+  C --> D["***handle_cmd_error***: mensaje error y libera el array de argumentos. Si era el primer comando, cierra el stdout y exit (EXIT_FAILURE)"];
+  A --> E["***get_path***: obtiene el ejecutable para un comando."];
+  E --> F["***get_path_from_envp***: obtiene la ruta del array de la variable de entorno"];
   F --> G["Busca el string de envp que empieza por PATH= y devuelve el resto de esa string o NULL si no la encuentra"];
   E --> H["Splitea la ruta obtenida del ***get_path_from_envp*** para obtener los directorios, splitea el comando en sus argumentos y libera la ruta"];
   H --> I["Si no hay directorios o no hay argumentos de comando, libera los arrays y devuelve NULL"];
-  E --> K["***build_cmd_path*** (get_path.c): construye la ruta del comando"];
+  E --> K["***build_cmd_path***: construye la ruta del comando"];
   K --> L["Hace strjoin de cada directorio con / y con el primer argumento de comando. Si la ruta existe y tiene permisos de ejecución, libera los arrays y la devuelve. Si no, lo intenta con el siguiente directorio. Si no lo encuentra, devuelve NULL."];
   E --> M["Si existe, devuelve el array resultante de ***build_cmd_path***, si no, libera los arrays y devuelve un duplicado del cmd"];
   A --> N["Si la ruta obtenida de ***get_path*** es NULL o no tiene acceso de ejecución"];
@@ -247,11 +246,10 @@ graph LR;
   O --> D;
   A --> P["Llama a execve() con la ruta, los argumentos del comando y la variable de entorno"];
   P --> Q["Si execve() == -1"];
-  Q --> R["***handle_cmd_error*** (pipex_utils.c): mensaje error y libera el array de argumentos. Libera la ruta, los argumentos de comando y exit (EXIT_FAILURE)"];
+  Q --> R["***handle_cmd_error***: mensaje error y libera el array de argumentos. Libera la ruta, los argumentos de comando y exit (EXIT_FAILURE)"];
 
 style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 style R fill:#ffcccb,stroke:#ff0000,stroke-width:1px
-
 ```
 
 ### Flujo de bonus
