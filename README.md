@@ -65,10 +65,6 @@ El proyecto consiste en crear un programa que se ejecute de la siguiente manera:
 | Argumentos       |errnum: código de error a convertir en un mensaje de error. <br> Típicamente es el valor de errno después de una operación fallida.|
 | Return   | Devuelve un puntero a una cadena con el mensaje de error <br> correspondiente al valor de errnum.|
 
-  NOTA PERSONAL
-
-  Con tal de que mis mensajes error sean lo más parecidos posibles a los mensajes error del comando *< file1 cmd1 | cmd2 > file2* , he decidido imprimir mis mensajes personalizados con ft_putstr_fd en vez de utilizar perror() y strerror().
-
 | ***access()***   |          |
 |------------------|-----------------|
 | ¿Qué hace?     |Comprueba la accesibilidad de un archivo o directorio. |
@@ -181,7 +177,7 @@ Debe comportarse como: *cmd << LIMITADOR | cmd1 >> file*
 
 *cmd1 >> file*: el comando recibe la entrada del pipe, >> es el operador de redirección para añadir (append) la salida al final del archivo. Si el archivo no existe, se crea.
 
-### Flujo de pipex
+### Flujo del pipex
 
 ```mermaid
 graph LR;
@@ -252,9 +248,9 @@ style D fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 style R fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 ```
 
-### Flujo de bonus
+### Flujo del bonus
 
-<span style="color:red">EL BONUS NO LO TUVE 100% BIEN!! ME FALLA EL HERE_DOC</span>
+🔴EL BONUS NO LO TUVE 100% BIEN!! ME FALLA EL HERE_DOC🔴
 
 ```mermaid
 graph LR;
