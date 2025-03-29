@@ -254,7 +254,7 @@ style R fill:#ffcccb,stroke:#ff0000,stroke-width:1px
 
 ### Flujo de bonus
 
-EL BONUS NO LO TUVE 100% BIEN!! ME FALLA EL HERE_DOC
+<span style="color:red">EL BONUS NO LO TUVE 100% BIEN!! ME FALLA EL HERE_DOC</span>
 
 ```mermaid
 graph LR;
